@@ -1,26 +1,33 @@
 import 'bootstrap/dist/css/bootstrap.css'
 import {useDispatch} from "react-redux";
-import {loadPostByCategories, loadPostSortByPrice} from "../../store/actions";
+import {loadPostByCategories, loadPosts} from "../../store/actions";
 import {useEffect} from "react";
 
 function Filter() {
     const dispatch = useDispatch();
 
-
     const onSortChange = (e) => {
         if (e.target.value === 'countAsc' || e.target.value === 'countDesc') {
-            dispatch(loadPostSortByPrice(e.target.value));
+            dispatch(loadPosts(e.target.value));
+            return;
         }
-        dispatch(loadPostByCategories(e.target.value));
-    }
+        if (e.target.value === '') {
+            dispatch(loadPosts());
+            return;
+        }
+        return dispatch(loadPostByCategories(e.target.value));
+    };
+
     useEffect(() => {
+        // dispatch(loadPosts());
+        // dispatch(loadPostByCategories());
     }, [dispatch, onSortChange])
 
 
     return (
         <div className="dropdown d-flex">
             <select onChange={onSortChange} className="form-select me-5">
-                <option value=''>Сортировка по категории</option>
+                <option value='home'>Сортировка по категории</option>
                 <option value='smartphones'>Смартфоны</option>
                 <option value='laptops'>Ноутбуки</option>
                 <option value='fragrances'>Парфюмы</option>

@@ -3,17 +3,13 @@ import {Link} from "react-router-dom";
 import {shallowEqual, useSelector} from "react-redux";
 
 export default function Description() {
-    const {post, loading, error} = useSelector((state) => {
+    const {post, loading} = useSelector((state) => {
         return state.post
     }, shallowEqual);
 
     if (loading) {
         return <>Идет загрузка...</>
     }
-
-    // if (error) {
-    //     return <button onClick={handleRequest}>Повторить запрос?</button>
-    // }
 
     return (
         <div>

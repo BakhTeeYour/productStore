@@ -14,21 +14,29 @@ export const POST_CATEGORIES_REQUEST = 'POST_CATEGORIES_REQUEST';
 export const POST_CATEGORIES_SUCCESS = 'POST_CATEGORIES_SUCCESS';
 export const POST_CATEGORIES_FAIL = 'POST_CATEGORIES_FAIL';
 
-export const POST_SORT_BY_PRICE_REQUEST = 'POST_SORT_BY_PRICE_REQUEST';
-export const POST_SORT_BY_PRICE_SUCCESS = 'POST_SORT_BY_PRICE_SUCCESS';
-export const POST_SORT_BY_PRICE_FAIL = 'POST_SORT_BY_PRICE_FAIL';
+const PRODUCT_URL = 'https://dummyjson.com/products/';
 
-export const loadPosts = () => async (dispatch) => {
+export const loadPosts = (value) => async (dispatch) => {
     try {
         dispatch(postsRequest());
-        const response = await fetch(`https://dummyjson.com/products/`)
+        const response = await fetch(PRODUCT_URL);
 
         if (!response.ok) {
             throw new Error('bad http status');
         }
 
-        const body = await response.json();
-        dispatch(postsSuccess(body));
+        const {products} = await response.json();
+
+        if (value === 'countAsc') {
+            const sortByAsc = products.sort((a, b) => a.price - b.price);
+            dispatch(postsSuccess(sortByAsc));
+            return;
+        }
+        if (value === 'countDesc') {
+            const sortByDesc = products.sort((a, b) => b.price - a.price);
+            return dispatch(postsSuccess(sortByDesc));
+        }
+        dispatch(postsSuccess(products))
     } catch (error) {
         dispatch(postsFail(error));
     }
@@ -37,7 +45,7 @@ export const loadPosts = () => async (dispatch) => {
 export const loadPost = (id = 1) => async (dispatch) => {
     try {
         dispatch(postRequest());
-        const response = await fetch(`https://dummyjson.com/products/${id}`)
+        const response = await fetch(`${PRODUCT_URL}${id}`)
 
         if (!response.ok) {
             throw new Error('bad http status');
@@ -53,14 +61,15 @@ export const loadPost = (id = 1) => async (dispatch) => {
 export const loadSearchPost = (value) => async (dispatch) => {
     try {
         dispatch(searchPostRequest());
-        const response = await fetch(`https://dummyjson.com/products/search?q=${value}`)
+        const response = await fetch(`${PRODUCT_URL}search?q=${value}`)
 
         if (!response.ok) {
             throw new Error('bad http status');
         }
 
-        const body = await response.json();
-        dispatch(searchPostSuccess(body));
+        const {products} = await response.json();
+        console.log(products)
+        dispatch(searchPostSuccess(products));
     } catch (error) {
         dispatch(searchPostFail(error));
     }
@@ -69,42 +78,27 @@ export const loadSearchPost = (value) => async (dispatch) => {
 export const loadPostByCategories = (value) => async (dispatch) => {
     try {
         dispatch(postCategoriesRequest());
-        const response = await fetch(`https://dummyjson.com/products/category/${value}`)
+        if (value !== 'home') {
+            const response = await fetch(`${PRODUCT_URL}/category/${value}`);
 
-        if (!response.ok) {
-            throw new Error('bad http status');
+            if (!response.ok) {
+                throw new Error('bad http status');
+            }
+
+            const {products} = await response.json();
+            dispatch(postCategoriesSuccess(products));
+            return;
         }
-
-        const body = await response.json();
-        dispatch(postCategoriesSuccess(body));
-    } catch (error) {
-        dispatch(postCategoriesFail(error));
-    }
-};
-
-export const loadPostSortByPrice = (value) => async (dispatch) => {
-    try {
-        dispatch(postSortByPriceRequest());
-        const response = await fetch(`https://dummyjson.com/products/`)
+        const response = await fetch(PRODUCT_URL);
 
         if (!response.ok) {
             throw new Error('bad http status');
         }
 
         const {products} = await response.json();
-
-        if (value === 'countAsc') {
-            const sortByAsc = products.sort((a, b) => a.price - b.price);
-            dispatch(postSortByPriceSuccess(sortByAsc));
-            return;
-        }
-        if (value === 'countDesc') {
-            const sortByAsc = products.sort((a, b) => b.price - a.price);
-            dispatch(postSortByPriceSuccess(sortByAsc));
-        }
-
+        dispatch(postCategoriesSuccess(products));
     } catch (error) {
-        dispatch(postSortByPriceFail(error));
+        dispatch(postCategoriesFail(error));
     }
 };
 
@@ -188,27 +182,6 @@ export const postCategoriesSuccess = (items) => {
 export const postCategoriesFail = (error) => {
     return {
         type: POST_CATEGORIES_FAIL,
-        payload: {error},
-    };
-};
-
-export const postSortByPriceRequest = () => {
-    return {
-        type: POST_SORT_BY_PRICE_REQUEST,
-        payload: {},
-    };
-};
-
-export const postSortByPriceSuccess = (items) => {
-    return {
-        type: POST_SORT_BY_PRICE_SUCCESS,
-        payload: {items},
-    };
-};
-
-export const postSortByPriceFail = (error) => {
-    return {
-        type: POST_SORT_BY_PRICE_FAIL,
         payload: {error},
     };
 };
