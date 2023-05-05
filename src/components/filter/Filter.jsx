@@ -18,12 +18,6 @@ function Filter() {
         return dispatch(loadPostByCategories(e.target.value));
     };
 
-    useEffect(() => {
-        // dispatch(loadPosts());
-        // dispatch(loadPostByCategories());
-    }, [dispatch, onSortChange])
-
-
     return (
         <div className="dropdown d-flex">
             <select onChange={onSortChange} className="form-select me-5">

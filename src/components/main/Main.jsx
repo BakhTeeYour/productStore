@@ -7,7 +7,6 @@ import {useEffect} from "react";
 
 function Main() {
     const {posts, loading, error} = useSelector((state) => {
-        console.log(state)
         return state.posts
     }, shallowEqual);
     const dispatch = useDispatch();

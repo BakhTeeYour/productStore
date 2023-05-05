@@ -68,7 +68,6 @@ export const loadSearchPost = (value) => async (dispatch) => {
         }
 
         const {products} = await response.json();
-        console.log(products)
         dispatch(searchPostSuccess(products));
     } catch (error) {
         dispatch(searchPostFail(error));

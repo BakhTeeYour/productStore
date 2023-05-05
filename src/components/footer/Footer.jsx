@@ -1,4 +1,3 @@
-import './Footer.css'
 import 'bootstrap/dist/css/bootstrap.css'
 
 function Footer() {
