@@ -1,7 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.css'
 import {useDispatch} from "react-redux";
 import {loadPostByCategories, loadPosts} from "../../store/actions";
-import {useEffect} from "react";
 
 function Filter() {
     const dispatch = useDispatch();
