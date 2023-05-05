@@ -10,9 +10,13 @@ export const SEARCH_POST_REQUEST = 'SEARCH_POST_REQUEST';
 export const SEARCH_POST_SUCCESS = 'SEARCH_POST_SUCCESS';
 export const SEARCH_POST_FAIL = 'SEARCH_POST_FAIL';
 
-export const POST_CATEGORIES_REQUEST = 'POST_CATEGORIES__REQUEST';
-export const POST_CATEGORIES_SUCCESS = 'POST_CATEGORIES__SUCCESS';
-export const POST_CATEGORIES_FAIL = 'POST_CATEGORIES__FAIL';
+export const POST_CATEGORIES_REQUEST = 'POST_CATEGORIES_REQUEST';
+export const POST_CATEGORIES_SUCCESS = 'POST_CATEGORIES_SUCCESS';
+export const POST_CATEGORIES_FAIL = 'POST_CATEGORIES_FAIL';
+
+export const POST_SORT_BY_PRICE_REQUEST = 'POST_SORT_BY_PRICE_REQUEST';
+export const POST_SORT_BY_PRICE_SUCCESS = 'POST_SORT_BY_PRICE_SUCCESS';
+export const POST_SORT_BY_PRICE_FAIL = 'POST_SORT_BY_PRICE_FAIL';
 
 export const loadPosts = () => async (dispatch) => {
     try {
@@ -72,10 +76,35 @@ export const loadPostByCategories = (value) => async (dispatch) => {
         }
 
         const body = await response.json();
-        console.log(body)
         dispatch(postCategoriesSuccess(body));
     } catch (error) {
         dispatch(postCategoriesFail(error));
+    }
+};
+
+export const loadPostSortByPrice = (value) => async (dispatch) => {
+    try {
+        dispatch(postSortByPriceRequest());
+        const response = await fetch(`https://dummyjson.com/products/`)
+
+        if (!response.ok) {
+            throw new Error('bad http status');
+        }
+
+        const {products} = await response.json();
+
+        if (value === 'countAsc') {
+            const sortByAsc = products.sort((a, b) => a.price - b.price);
+            dispatch(postSortByPriceSuccess(sortByAsc));
+            return;
+        }
+        if (value === 'countDesc') {
+            const sortByAsc = products.sort((a, b) => b.price - a.price);
+            dispatch(postSortByPriceSuccess(sortByAsc));
+        }
+
+    } catch (error) {
+        dispatch(postSortByPriceFail(error));
     }
 };
 
@@ -159,6 +188,27 @@ export const postCategoriesSuccess = (items) => {
 export const postCategoriesFail = (error) => {
     return {
         type: POST_CATEGORIES_FAIL,
+        payload: {error},
+    };
+};
+
+export const postSortByPriceRequest = () => {
+    return {
+        type: POST_SORT_BY_PRICE_REQUEST,
+        payload: {},
+    };
+};
+
+export const postSortByPriceSuccess = (items) => {
+    return {
+        type: POST_SORT_BY_PRICE_SUCCESS,
+        payload: {items},
+    };
+};
+
+export const postSortByPriceFail = (error) => {
+    return {
+        type: POST_SORT_BY_PRICE_FAIL,
         payload: {error},
     };
 };

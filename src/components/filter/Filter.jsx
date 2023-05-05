@@ -1,19 +1,20 @@
 import 'bootstrap/dist/css/bootstrap.css'
 import {useDispatch} from "react-redux";
-import {loadPostByCategories} from "../../store/actions";
+import {loadPostByCategories, loadPostSortByPrice} from "../../store/actions";
 import {useEffect} from "react";
 
-function Filter({onSort}) {
+function Filter() {
     const dispatch = useDispatch();
 
 
     const onSortChange = (e) => {
         if (e.target.value === 'countAsc' || e.target.value === 'countDesc') {
+            dispatch(loadPostSortByPrice(e.target.value));
         }
         dispatch(loadPostByCategories(e.target.value));
     }
     useEffect(() => {
-    }, [dispatch, onSortChange, onSort])
+    }, [dispatch, onSortChange])
 
 
     return (
