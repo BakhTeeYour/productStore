@@ -1,13 +1,12 @@
-import {applyMiddleware, compose, createStore} from "redux";
-import {rootReducer} from "./reducers"
-import thunk from 'redux-thunk';
+import {configureStore, combineReducers} from "@reduxjs/toolkit";
+import {postReducer} from "./reducers/post";
+import {postsReducer} from "./reducers/posts";
 
-const store = createStore(
-    rootReducer,
-    compose(
-        applyMiddleware(thunk),
-        window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
-    ),
+export const rootReducer = combineReducers({
+    posts: postsReducer,
+    post: postReducer,
+})
 
-);
-export default store
+export const store = configureStore({
+    reducer: rootReducer
+})

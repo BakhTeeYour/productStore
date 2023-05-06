@@ -1,5 +1,5 @@
 import {useDispatch} from "react-redux";
-import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap/dist/css/bootstrap.css';
 import {loadSearchPost} from "../../store/actions";
 
 export default function Search() {
@@ -8,7 +8,6 @@ export default function Search() {
         e.preventDefault();
         dispatch(loadSearchPost(e.target.value));
     }
-
     return (
         <div>
             <form className="d-flex" role="search">
@@ -21,5 +20,4 @@ export default function Search() {
             </form>
         </div>
     )
-
 }

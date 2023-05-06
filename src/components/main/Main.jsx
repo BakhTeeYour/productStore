@@ -1,9 +1,9 @@
-import 'bootstrap/dist/css/bootstrap.css';
-import './Main.css'
 import {Link} from "react-router-dom"
 import {shallowEqual, useDispatch, useSelector} from "react-redux";
 import {loadPost, loadPosts} from "../../store/actions";
 import {useEffect} from "react";
+import 'bootstrap/dist/css/bootstrap.css';
+import './Main.css';
 
 function Main() {
     const {posts, loading, error} = useSelector((state) => {
@@ -11,9 +11,8 @@ function Main() {
     }, shallowEqual);
     const dispatch = useDispatch();
 
-
     const handleRequest = () => {
-        dispatch(loadPosts())
+        dispatch(loadPosts());
     };
 
     useEffect(() => {
@@ -46,7 +45,6 @@ function Main() {
                 })}
             </div>
         </>
-
     );
 }
 
