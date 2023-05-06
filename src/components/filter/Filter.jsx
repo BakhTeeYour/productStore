@@ -2,9 +2,7 @@ import {useDispatch} from "react-redux";
 import {loadPostByCategories, loadPosts} from "../../store/actions";
 import 'bootstrap/dist/css/bootstrap.css';
 
-
 function Filter() {
-
     const dispatch = useDispatch();
 
     const onSortChange = (e) => {
